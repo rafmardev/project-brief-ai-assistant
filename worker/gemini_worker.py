@@ -6,7 +6,8 @@ from core.use_cases.notify_gemini import NotifyGeminiUseCase
 import time
 
 def main():
-    event_bus = KafkaEventBus(bootstrap_servers='localhost:9092', group_id='my-group')
+    settings = get_settings()
+    event_bus = KafkaEventBus(bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS, group_id=settings.KAFKA_GROUP_ID)
 
     gemini_uploader = GeminiUploaderDummy()
     use_case = NotifyGeminiUseCase(gemini_uploader)
