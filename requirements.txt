@@ -1,5 +1,8 @@
 kafka-python
 fastapi
 pydantic
-uvicorn
+uvicorn[standard]
 google-genai
+requests
+python-dotenv
+python-multipart
