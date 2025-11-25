@@ -1,0 +1,5 @@
+infrastructure/storage/
+*/__pycache__/
+config/.env
+.venv
+*.pyc

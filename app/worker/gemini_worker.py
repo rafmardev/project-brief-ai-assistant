@@ -1,7 +1,7 @@
-from core.interfaces.event_bus import EventBus
 from infrastructure.events.kafka_event_bus import KafkaEventBus
 from infrastructure.gemini.gemini_uploader_dummy import GeminiUploaderDummy
 from core.use_cases.notify_gemini import NotifyGeminiUseCase
+from config.settings import get_settings
 
 import time
 

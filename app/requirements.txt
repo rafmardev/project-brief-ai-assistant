@@ -6,3 +6,5 @@ google-genai
 requests
 python-dotenv
 python-multipart
+confluent_kafka
+pydantic_settings
