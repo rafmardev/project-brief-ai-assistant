@@ -1,7 +1,6 @@
 class UploadDocumentUseCase:
-    def __init__(self, document_repository, event_bus):
+    def __init__(self, document_repository):
         self.document_repository = document_repository
-        self.event_bus = event_bus
 
     def upload(self, files):
         uploaded_files = []
