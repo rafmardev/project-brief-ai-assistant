@@ -22,7 +22,7 @@ def generate_brief(files: List[UploadFile] = File(...)):
     uploader = GeminiUploaderDummy()  # Assuming GeminiUploader is defined elsewhere
     use_case = UploadDocumentUseCase(document_repository=document_repository, uploader=uploader)
     uploaded_documents = use_case.upload(files)
-    return {"message": "This endpoint will handle file uploads and generate a project brief."}
+    return {"message": uploaded_documents.gemini_response.message, "document_id": uploaded_documents.document.id}
 
 # Run semantic queries over the uploaded files
 @app.post("/search")

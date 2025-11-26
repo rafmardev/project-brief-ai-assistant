@@ -10,7 +10,7 @@ class UploadDocumentUseCase:
             data: bytes = file.file.read()
             document = self.document_repository.save(data, file.filename)
 
-            result = self.uploader.upload(document)
+            result = self.uploader.upload(document.path, document.filename)
 
         return UploadResult(
             gemini_response=result,
