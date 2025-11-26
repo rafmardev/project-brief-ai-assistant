@@ -96,6 +96,9 @@ Description: Submit a query in English to search or retrieve information from th
 ## Installation
 ```bash
 python -m venv venv
+# or
+python3 -m venv venv
+
 # Linux and Mac
 source venv/bin/activate
 # Windows
@@ -121,8 +124,8 @@ For test purposes, you can use these examples or execute bashes scripts in app f
 
 curl -X POST "http://localhost:8000/brief" \
   -H "Content-Type: multipart/form-data" \
-  -F "files=@./app/test/test.txt" \
-  -F "files=@./app/test/test2.txt"
+  -F "files=@./test/test.txt" \
+  -F "files=@./test/test2.txt"
 
 curl -X POST "http://localhost:8000/search" \
   -H "Content-Type: application/json" \
