@@ -8,28 +8,34 @@ The project follows a Clean Architecture approach, aiming to decouple the differ
 - Dependency Rule: Inner layers (use cases, entities) do not depend on outer layers (frameworks, APIs, DB).
 - Testability: Business logic can be tested independently from FastAPI or storage layers.
 - Extensibility: New use cases, endpoints, or storage backends can be added with minimal impact on existing code.
+
 **Use Case 1: File Upload & Store Creation**
-1. Upload Endpoint (`/brief`)
+1. Upload Endpoint - API Layer (`/brief`)
 - Receives one or multiple documents from the user.
+- Receives HTTP requests, validates input, and delegates to the use case.
 - Calls the File Upload Use Case.
+- Returns a response with the generated store_id and a summary.
 2. Use Case Logic
 - Creates a new store to organize uploaded files.
 Uploads files to the store (e.g., Gemini File Store or server storage).
-- Persists metadata locally (or in a database) with the associated store_id.
-3. API Layer
-- Receives HTTP requests, validates input, and delegates to the use case.
-- Returns a response with the generated store_id or a summary.
+- Persists documents locally with the associated store_id.
+3. Repository
+- Saves a file in the folder created with its store_id.
+4. Gemini Integration Services
+- Uploads a file, creates stores.
 
 **Use Case 2: Semantic Query**
-1. Query Endpoint (/query)
+1. Query Endpoint (`/query`)
 - Receives a query in English and a store_id referencing a previously uploaded project.
+- Returns an answer or relevant snippet to the user.
+
 2. Use Case Logic
 - Loads the relevant documents from the store.
 - Executes a semantic search or natural language query over the content.
 - Returns an answer or relevant snippet to the user.
-3. API Layer
-- Receives the HTTP request, validates parameters, and delegates to the query use case.
-- Formats and returns the response to the client.
+
+3. Gemini Integration Service
+- Makes sematic queries to Gemini API. 
 
 ---
 
@@ -48,7 +54,7 @@ Uploads files to the store (e.g., Gemini File Store or server storage).
 - Upload multiple documents and generate a concise summary.
 - Query previously uploaded documents in English.
 - Fast and lightweight API built on FastAPI.
-- Easily extensible for additional endpoints or NLP features.
+- Easily extensible for additional endpoints.
 
 ---
 
@@ -92,6 +98,9 @@ Description: Submit a query in English to search or retrieve information from th
 python -m venv venv
 pip -tr requirements.txt
 ```
+
+In config folder, in .env file, you can update your GEMINI_API_KEY.
+
 ---
 
 ## Usage
@@ -100,7 +109,7 @@ You can access the SwaggerUI documentation of the API once the server is deploye
 
 https://localhost:8000/docs
 
-For test purposes, you can use these examples
+For test purposes, you can use these examples or execute bashes scripts in app folder:
 
 curl -X POST "http://localhost:8000/brief" \
   -H "Content-Type: multipart/form-data" \
@@ -120,19 +129,41 @@ Python 3.10+
 Potential enhancements to the system include:
 1. **Observability Layer**
 - Metrics Collection: Track request latency, throughput, error rates, and file upload times.
-- Distributed Tracing: Trace requests across different components (FastAPI, file store, NLP services) to identify slow points.
+- Distributed Tracing: Trace requests across different components (FastAPI, file store) to identify slow points.
 - Logging Enhancements: Structured and centralized logging to monitor errors, warnings, and business events.
-- Alerts & Dashboards: Integration with tools like Prometheus, Grafana, or Elastic Stack to visualize metrics and set up alerts.
+- Alerts & Dashboards: Integration with tools like Prometheus, Grafana to visualize metrics and set up alerts.
 **Benefits:**
 - Early detection of bottlenecks in file uploads or semantic queries.
 - Better understanding of system performance under load.
 - Improved maintainability and faster debugging in production.
-2. Event-Driven Programming for Parallel Operations
+2. **Event-Driven Programming for Parallel Operations**
 - Implement asynchronous or event-driven workflows to handle operations concurrently, such as:
   - Uploading multiple files simultaneously.
   - Persisting files and metadata in the system in parallel.
-- This could be achieved using async/await in FastAPI, Celery workers, or message brokers like RabbitMQ or Kafka.
+- This could be achieved using message brokers like Kafka.
 **Benefits:**
 - Reduced latency for bulk file uploads.
 - More efficient use of system resources.
 - Scalable architecture that can handle high volumes of concurrent operations.
+
+## Future Production Deployment
+For deploying the FastAPI backend to production, a cloud-based approach is recommended to ensure scalability, reliability, and maintainability. Some best practices and considerations include:
+1. **Cloud Infrastructure Options**
+- Containers (PaaS / Orchestrated): Docker + Kubernetes (EKS, GKE, AKS)
+  - Easy scaling and reproducible deployments.
+  - Supports rolling updates and zero-downtime deployments.
+- Serverless Functions: AWS Lambda, Google Cloud Functions
+  - Pay-per-use; ideal for short-lived tasks such as semantic queries or file processing.
+  - No need to maintain a server, but may require adaptation for large file uploads.
+- Infrastructure as Code (IaC) with Terraform
+- Instead of manually provisioning cloud resources, consider using Terraform to define your infrastructure as code.
+2. **Deployment Best Practices**
+- Save operations metadata with Gemini API in a database.
+- Environment Configuration: Separate environment variables for production (API keys, database URLs).
+- Security: Enable HTTPS, secure storage for files, and proper authentication/authorization.
+- Scalability: Use auto-scaling for handling variable loads and high concurrency.
+- Persistent Storage: Use cloud object storage (S3, GCS, Azure Blob) for uploaded documents.
+3. **CI/CD Integration**
+- Automate deployments using GitHub Actions, GitLab CI/CD, or cloud-native pipelines.
+- Include automated tests and linting before deployment.
+- Ensure rollback strategies in case of failed deployments.

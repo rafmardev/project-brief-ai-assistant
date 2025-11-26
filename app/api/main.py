@@ -42,7 +42,6 @@ def generate_brief(files: List[UploadFile] = File(...)):
         brief=uploaded_documents.gemini_response.message
     )
 
-# Run semantic queries over the uploaded files
 @app.post("/search",
           responses={404: {"description": "Project not found"}},
           description="Endpoint for semantic search over project documents")
