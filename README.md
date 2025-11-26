@@ -122,15 +122,17 @@ https://localhost:8000/docs
 
 For test purposes, you can use these examples or execute bashes scripts in app folder:
 
+``` bash
 curl -X POST "http://localhost:8000/brief" \
   -H "Content-Type: multipart/form-data" \
   -F "files=@./test/test.txt" \
   -F "files=@./test/test2.txt"
 
+# the project_id or store_id is available in the response of the /brief endpoint or in the infrastructure/storage folder, as every folder is named with the project_id/store_id
 curl -X POST "http://localhost:8000/search" \
   -H "Content-Type: application/json" \
   -d '{"project_id": "2u4panh6xjok-fb9hs47ggq3a", "query": "take some words of the files and build a phrase in english, show me english phrase and in the original language "}'
-
+```
 ---
 
 ## Requirements
