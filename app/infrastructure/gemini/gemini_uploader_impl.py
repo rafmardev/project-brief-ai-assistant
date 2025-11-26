@@ -30,7 +30,7 @@ class GeminiUploaderImplementation(GeminiUploader):
         # Ask a question about the file
         response = client.models.generate_content(
             model="gemini-2.5-flash",
-            contents="""Can you tell me about Robert Graves""",
+            contents="""Do a brief summary of the contents of the file.""",
             config=types.GenerateContentConfig(
                 tools=[
                     types.Tool(

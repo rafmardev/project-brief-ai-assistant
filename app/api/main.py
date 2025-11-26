@@ -21,6 +21,8 @@ def read_root():
 def generate_brief(files: List[UploadFile] = File(...)):
     if not files:
         return {"error": "No files uploaded."}
+    if not isinstance(files, list):
+        files = [files]
     document_repository = LocalDocumentRepository()
     uploader = GeminiUploaderDummy()  # Assuming GeminiUploader is defined elsewhere
     use_case = UploadDocumentUseCase(document_repository=document_repository, uploader=uploader)

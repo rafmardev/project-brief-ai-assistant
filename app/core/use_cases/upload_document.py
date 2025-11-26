@@ -5,12 +5,10 @@ class UploadDocumentUseCase:
         self.document_repository = document_repository
         self.uploader = uploader
 
-    def upload(self, files):
-        for file in files:
-            data: bytes = file.file.read()
-            document = self.document_repository.save(data, file.filename)
+    def upload(self, files):        
+        document = self.document_repository.save(files)
 
-            result = self.uploader.upload(document.path, document.filename)
+        result = self.uploader.upload(document.path, document.filename)
 
         return UploadResult(
             gemini_response=result,
