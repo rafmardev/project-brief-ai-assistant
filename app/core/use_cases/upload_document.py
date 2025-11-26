@@ -7,8 +7,8 @@ class UploadDocumentUseCase:
 
     def upload(self, files):
         for file in files:
-            content = file.file.read()
-            document = self.document_repository.save(file.filename, content)
+            data: bytes = file.file.read()
+            document = self.document_repository.save(data, file.filename)
 
             result = self.uploader.upload(document)
 

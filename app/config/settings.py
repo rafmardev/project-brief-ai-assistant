@@ -1,3 +1,4 @@
+import os
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
@@ -11,7 +12,9 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str
 
     # Storage
-    STORAGE_PATH: str = "../infrastructure/storage"
+    PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    STORAGE_FOLDER: str = "infrastructure/storage"
+    STORAGE_PATH: str = os.path.join(PROJECT_ROOT, STORAGE_FOLDER)
 
     class Config:
         env_file = "./config/.env"
