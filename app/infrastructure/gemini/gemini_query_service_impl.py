@@ -1,4 +1,5 @@
 
+from app.core.domain.entities import GeminiResponse
 from core.interfaces.gemini_query_service import DocumentQueryService
 
 
@@ -8,4 +9,7 @@ class GeminiQueryServiceImpl(DocumentQueryService):
         
     def query(self, file_bytes: bytes, prompt: str) -> str:
         response = self.api_client.query_document(file_bytes, prompt)
-        return response
+        return GeminiResponse(
+                message=response.content,
+                success=True
+            )

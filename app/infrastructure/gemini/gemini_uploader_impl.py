@@ -1,3 +1,4 @@
+from app.core.domain.entities import GeminiResponse
 from core.interfaces.gemini_uploader import GeminiUploader
 # Google API
 from google import genai
@@ -42,4 +43,7 @@ class GeminiUploaderImplementation(GeminiUploader):
             )
         )
 
-        return response.text
+        return GeminiResponse(
+                message=response.content,
+                success=True
+            )

@@ -1,9 +1,14 @@
 from dataclasses import dataclass
 @dataclass
 class Document:
-    id: str
+    project_id: str
     filename: str
     path: str
+
+@dataclass
+class DocumentFile:
+    document: Document
+    file: bytes
 
 @dataclass
 class GeminiResponse:

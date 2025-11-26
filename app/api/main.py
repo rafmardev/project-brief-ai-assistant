@@ -29,7 +29,7 @@ def generate_brief(files: List[UploadFile] = File(...)):
     uploaded_documents = use_case.upload(files)
     
     return BriefResponse(
-        project_id=uploaded_documents.document.id,
+        project_id=uploaded_documents.document.project_id,
         brief=uploaded_documents.gemini_response.message
     )
 
@@ -45,12 +45,7 @@ def run_search(query: SemanticQuery):
             document_query_service=query_service,
             repository=repository)
         
-        response = use_case.execute(file_id=query.project_id, prompt=query.query)
+        response = use_case.execute(project_id=query.project_id, prompt=query.query)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Document not found.")
-    return SearchResult(results=[
-        {
-            "file": query.project_id,
-            "snippet": response.message
-        }
-    ])
+    return SearchResult(results=response)

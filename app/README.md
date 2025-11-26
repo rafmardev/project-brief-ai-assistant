@@ -9,10 +9,11 @@ curl -X POST "http://localhost:8000/upload/multiple" \
 
 curl -X POST "http://localhost:8000/brief" \
   -H "Content-Type: multipart/form-data" \
-  -F "files=./app/test/test.txt"
+  -F "files=@./app/test/test.txt" \
+  -F "files=@./app/test/test2.txt"
 
 curl -X POST "http://localhost:8000/search" \
   -H "Content-Type: application/json" \
-  -d '{"project_id": "09b5e688-5d52-41bf-9b73-e53a25c0601b", "query": "query_example"}'
+  -d '{"project_id": "99b08fbc-6863-4f37-a36d-8e0725b0fcda", "query": "query_example"}'
 
 https://localhost:8000/docs
