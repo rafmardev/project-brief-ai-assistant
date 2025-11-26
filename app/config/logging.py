@@ -16,4 +16,13 @@ def setup_logging():
     if not logger.handlers:
         logger.addHandler(handler)
 
+    uvicorn_loggers = (
+        "uvicorn",
+        "uvicorn.error",
+        "uvicorn.access",
+    )
+    for logger_name in uvicorn_loggers:
+        logging.getLogger(logger_name).handlers = []
+        logging.getLogger(logger_name).propagate = True
+    
     return logger

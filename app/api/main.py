@@ -1,4 +1,7 @@
 from typing import List
+from config.settings import get_settings
+from infrastructure.gemini.gemini_query_service_impl import GeminiQueryServiceImpl
+from infrastructure.gemini.gemini_uploader_impl import GeminiUploaderImpl
 from core.use_cases.document_query import QueryDocumentUseCase
 from infrastructure.gemini.gemini_query_service_dummy import GeminiQueryServiceDummy
 from core.domain.entities import BriefResponse, SearchResult, SemanticQuery
@@ -8,8 +11,12 @@ from infrastructure.gemini.gemini_uploader_dummy import GeminiUploaderDummy
 from config.logging import setup_logging
 from fastapi import FastAPI, UploadFile, File, HTTPException
 
+from google import genai
+from google.genai import types
+
 logger = setup_logging()
 app = FastAPI()
+client = genai.Client(api_key=get_settings().GEMINI_API_KEY)
 
 @app.get("/health")
 def read_root():
@@ -24,7 +31,7 @@ def generate_brief(files: List[UploadFile] = File(...)):
     if not isinstance(files, list):
         files = [files]
     document_repository = LocalDocumentRepository()
-    uploader = GeminiUploaderDummy()  # Assuming GeminiUploader is defined elsewhere
+    uploader = GeminiUploaderImpl(client)  # Assuming GeminiUploader is defined elsewhere
     use_case = UploadDocumentUseCase(document_repository=document_repository, uploader=uploader)
     uploaded_documents = use_case.upload(files)
     
@@ -35,10 +42,10 @@ def generate_brief(files: List[UploadFile] = File(...)):
 
 # Run semantic queries over the uploaded files
 @app.post("/search",
-          responses={404: {"description": "Document not found"}},
+          responses={404: {"description": "Project not found"}},
           description="Endpoint for semantic search over project documents")
 def run_search(query: SemanticQuery):
-    query_service = GeminiQueryServiceDummy() 
+    query_service = GeminiQueryServiceImpl(client) 
     repository = LocalDocumentRepository()
     try:
         use_case = QueryDocumentUseCase(
@@ -47,5 +54,5 @@ def run_search(query: SemanticQuery):
         
         response = use_case.execute(project_id=query.project_id, prompt=query.query)
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Document not found.")
+        raise HTTPException(status_code=404, detail="Project not found.")
     return SearchResult(results=response)

@@ -3,6 +3,6 @@ from abc import ABC, abstractmethod
 
 class GeminiQueryService(ABC):
     @abstractmethod 
-    def query(self, file_bytes: bytes, prompt: str) -> str:
+    def query(self, store_id: str, prompt: str) -> str:
         """Retrieves a document by its ID."""
         pass    

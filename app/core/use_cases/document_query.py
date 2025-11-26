@@ -1,7 +1,5 @@
 
-from http.client import HTTPException
-
-from core.domain.entities import FileSearchResult
+from core.domain.entities import Document, FileSearchResult
 
 
 class QueryDocumentUseCase:
@@ -9,14 +7,15 @@ class QueryDocumentUseCase:
         self.document_query_service = document_query_service
         self.repository = repository
 
-    def execute(self, project_id: str, prompt: str) -> list[FileSearchResult]:
-        files = self.repository.get(project_id)
+    def execute(self, project_id: str, prompt: str) -> list[Document]:
+        documents = self.repository.get(project_id)
         response = []
         
-        for document_file in files:
+        for document in documents:
             response.append(
-                FileSearchResult(file=document_file.document.filename, snippet=self.document_query_service.query(document_file.file, prompt)
-                                 )
+                FileSearchResult(
+                    file=document.filename, snippet=self.document_query_service.query(project_id, prompt)
+                )
             )
         
         return response

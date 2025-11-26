@@ -7,17 +7,16 @@ class Settings(BaseSettings):
     APP_NAME: str = "Document API"
     ENV: str = "development"
 
-    # Gemini
-    GEMINI_ENDPOINT: str
+    # Gemini API
     GEMINI_API_KEY: str
 
     # Storage
     PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    STORAGE_FOLDER: str = "infrastructure/storage"
+    STORAGE_FOLDER: str = "infrastructure/storage/"
     STORAGE_PATH: str = os.path.join(PROJECT_ROOT, STORAGE_FOLDER)
 
     class Config:
-        env_file = "./config/.env"
+        env_file = "config/.env"
 
 @lru_cache()
 def get_settings():

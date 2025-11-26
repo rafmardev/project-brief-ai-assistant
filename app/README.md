@@ -14,6 +14,6 @@ curl -X POST "http://localhost:8000/brief" \
 
 curl -X POST "http://localhost:8000/search" \
   -H "Content-Type: application/json" \
-  -d '{"project_id": "99b08fbc-6863-4f37-a36d-8e0725b0fcda", "query": "query_example"}'
+  -d '{"project_id": "2u4panh6xjok-fb9hs47ggq3a", "query": "take some words of the files and build a phrase in english, show me english phrase and in the original language "}'
 
 https://localhost:8000/docs
