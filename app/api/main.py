@@ -1,17 +1,19 @@
 from typing import List
+from core.use_cases.document_query import QueryDocumentUseCase
+from infrastructure.gemini.gemini_query_service_dummy import GeminiQueryServiceDummy
 from core.domain.entities import BriefResponse, SearchResult, SemanticQuery
 from core.use_cases.upload_document import UploadDocumentUseCase
 from infrastructure.repositories.local_document_repository import LocalDocumentRepository
 from infrastructure.gemini.gemini_uploader_dummy import GeminiUploaderDummy
 from config.logging import setup_logging
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 
 logger = setup_logging()
 app = FastAPI()
 
 @app.get("/health")
 def read_root():
-    return {"Hello": "World"}
+    return {"health": "ok"}
 
 @app.post(
         "/brief", 
@@ -30,11 +32,23 @@ def generate_brief(files: List[UploadFile] = File(...)):
     )
 
 # Run semantic queries over the uploaded files
-@app.post("/search")
+@app.post("/search",
+          responses={404: {"description": "Document not found"}},
+          description="Endpoint for semantic search over project documents")
 def run_search(query: SemanticQuery):
+    query_service = GeminiQueryServiceDummy() 
+    repository = LocalDocumentRepository()
+    try:
+        use_case = QueryDocumentUseCase(
+            document_query_service=query_service,
+            repository=repository)
+        
+        response = use_case.execute(file_id=query.project_id, prompt=query.query)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Document not found.")
     return SearchResult(results=[
         {
-            "file": "example.txt",
-            "snippet": "This is a sample snippet containing the query term."
+            "file": query.project_id,
+            "snippet": response.message
         }
     ])
