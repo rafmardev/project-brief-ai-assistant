@@ -96,10 +96,18 @@ Description: Submit a query in English to search or retrieve information from th
 ## Installation
 ```bash
 python -m venv venv
-pip -tr requirements.txt
-```
+# Linux and Mac
+source venv/bin/activate
+# Windows
+venv\Scripts\activate
 
-In config folder, in .env file, you can update your GEMINI_API_KEY.
+pip install -r requirements.txt
+```
+In config folder, create .env file and update your GEMINI_API_KEY following .env.example file.
+
+``` bash
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+```
 
 ---
 
