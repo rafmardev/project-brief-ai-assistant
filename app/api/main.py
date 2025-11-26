@@ -1,7 +1,7 @@
 from typing import List
-from app.core.use_cases.upload_document import UploadDocumentUseCase
-from app.infrastructure.repositories.local_document_repository import LocalDocumentRepository
-from app.infrastructure.gemini.gemini_uploader_dummy import GeminiUploaderDummy
+from core.use_cases.upload_document import UploadDocumentUseCase
+from infrastructure.repositories.local_document_repository import LocalDocumentRepository
+from infrastructure.gemini.gemini_uploader_dummy import GeminiUploaderDummy
 from config.logging import setup_logging
 from fastapi import FastAPI, UploadFile, File
 

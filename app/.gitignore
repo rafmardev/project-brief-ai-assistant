@@ -3,3 +3,4 @@ infrastructure/storage/
 config/.env
 .venv
 *.pyc
+venv

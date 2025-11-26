@@ -1,4 +1,4 @@
-from app.core.domain.entities import UploadResult
+from core.domain.entities import UploadResult
 
 class UploadDocumentUseCase:
     def __init__(self, document_repository, uploader):

@@ -1,5 +1,5 @@
 import uuid
-from core.domain import Document;
+from core.domain.entities import Document;
 from core.interfaces.document_repository import DocumentRepository;
 
 class LocalDocumentRepository(DocumentRepository):

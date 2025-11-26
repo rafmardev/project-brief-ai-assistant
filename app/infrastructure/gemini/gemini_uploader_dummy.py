@@ -1,5 +1,5 @@
 
-from app.core.domain.entities import GeminiResponse
+from core.domain.entities import GeminiResponse
 from core.interfaces.gemini_uploader import GeminiUploader
 
 class GeminiUploaderDummy(GeminiUploader):
