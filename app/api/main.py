@@ -31,7 +31,7 @@ def generate_brief(files: List[UploadFile] = File(...)):
     if not isinstance(files, list):
         files = [files]
     document_repository = LocalDocumentRepository()
-    uploader = GeminiUploaderImpl(client)  # Assuming GeminiUploader is defined elsewhere
+    uploader = GeminiUploaderImpl(client)
     use_case = UploadDocumentUseCase(document_repository=document_repository, uploader=uploader)
     uploaded_documents = use_case.upload(files)
     

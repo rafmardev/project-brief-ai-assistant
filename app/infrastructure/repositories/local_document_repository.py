@@ -18,7 +18,7 @@ class LocalDocumentRepository(DocumentRepository):
 
         return Document(project_id, document.filename, full_path)
     
-    def get(self, project_id: str) -> list[bytes]:
+    def get(self, project_id: str) -> list[Document]:
         """Retrieves documents by its project_id."""
         documents = []
         path = None
