@@ -2,9 +2,9 @@
 from core.domain.entities import Document, FileSearchResult
 
 
-class QueryDocumentUseCase:
-    def __init__(self, document_query_service, repository):
-        self.document_query_service = document_query_service
+class SemanticQueryUseCase:
+    def __init__(self, semantic_query_service, repository):
+        self.semantic_query_service = semantic_query_service
         self.repository = repository
 
     def execute(self, project_id: str, prompt: str) -> list[Document]:
@@ -14,7 +14,7 @@ class QueryDocumentUseCase:
         for document in documents:
             response.append(
                 FileSearchResult(
-                    file=document.filename, snippet=self.document_query_service.query(project_id, prompt)
+                    file=document.filename, snippet=self.semantic_query_service.query(project_id, prompt)
                 )
             )
         

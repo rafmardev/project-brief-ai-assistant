@@ -31,24 +31,8 @@ class GeminiUploaderImpl(GeminiUploader):
         while not operation.done:
             time.sleep(5)
             operation = self.api_client.operations.get(operation)
+            if hasattr(operation, "error") and operation.error is not None:
+                raise Exception(f"Gemini API Error during file upload: {operation.error.message}")
 
-    def generate_brief(self, store_id):
-        # Ask a question about the file
-        response = self.api_client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents="""Do a brief summary of the contents all the files of the store.""",
-            config=types.GenerateContentConfig(
-                tools=[
-                    types.Tool(
-                        file_search=types.FileSearch(
-                            file_search_store_names=[f"fileSearchStores/{store_id}"]
-                        )
-                    )
-                ]
-            )
-        )
-
-        return GeminiResponse(
-                message=response.text,
-                success=True
-        )
+        logger.info(f"Uploaded file {file_path} to Gemini File Search store {store_id}.")
+        return operation.name

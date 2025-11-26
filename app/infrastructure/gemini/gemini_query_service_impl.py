@@ -22,6 +22,9 @@ class GeminiQueryServiceImpl(GeminiQueryService):
                 ]
             )
         )
+
+        if hasattr(response, "error")and response.error is not None:
+            raise Exception(f"Gemini API Error: {response.error.message}")
         
         return GeminiResponse(
                 message=response.text,

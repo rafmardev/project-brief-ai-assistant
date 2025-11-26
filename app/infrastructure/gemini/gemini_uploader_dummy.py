@@ -11,10 +11,3 @@ class GeminiUploaderDummy(GeminiUploader):
     def upload(self, file_path: str, store_id: str) -> str:
         # Dummy implementation for testing
         return f"file-{file_path}-in-store-{store_id}"
-    
-    def generate_brief(self, store_id: str) -> str:
-            # Dummy implementation for testing
-            return GeminiResponse(
-                    message=f"This is a dummy brief summary for store {store_id}.",
-                    success=True
-                )
